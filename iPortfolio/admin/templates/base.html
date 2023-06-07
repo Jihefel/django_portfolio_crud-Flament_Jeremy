@@ -1,0 +1,20 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  {% load bootstrap5 %}
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
+{% block head %}
+{% endblock head %}
+</head>
+
+<body>
+{% include "portfolio/header.html" %}
+  {% block content %}
+  {% endblock content %}
+{% include "portfolio/footer.html" %}
+</body>
+
+</html>
