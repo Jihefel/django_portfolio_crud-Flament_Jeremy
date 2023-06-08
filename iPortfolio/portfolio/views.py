@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Header, About, Skills, Portfolio, Services, Testimonials, Contact
-from admin.forms import HeaderForm, AboutForm, PortfolioForm, SkillsForm, PortfolioForm, ServicesForm, TestimonialsForm, ContactForm
+from admin.forms import HeaderForm, AboutForm, PortfolioForm, SkillsForm, ServicesForm, TestimonialsForm, ContactForm
 
 header = Header.objects.last()
 about = About.objects.last()
@@ -13,6 +13,7 @@ contact = Contact.objects.last()
 
 # Create your views here.
 def index(request):
+    portfolio = Portfolio.objects.all()
     context = {
     'header': header,
     'about': about,
@@ -43,7 +44,7 @@ def portfolio_details(request, id):
 
 # Admin
 
-def edit(request, section):
+def edit(request, section, id=None):
     form = None
     if request.method == 'POST':
         if section == 'header':
@@ -53,7 +54,11 @@ def edit(request, section):
         elif section == 'skills':
             form = SkillsForm(request.POST, instance=skills)
         elif section == 'portfolio':
-            form = PortfolioForm(request.POST, instance=portfolio)
+            if id is not None:
+                project = Portfolio.objects.get(id=id)
+                form = PortfolioForm(request.POST, instance=project)
+            else:
+                form = PortfolioForm()
         elif section == 'services':
             form = ServicesForm(request.POST, instance=services)
         elif section == 'testimonials':
@@ -65,7 +70,8 @@ def edit(request, section):
             form.save()
             return redirect('index')
         else:
-            print('no fdp')
+            print('no')
+      
     else:
         if section == 'header':
             form = HeaderForm(instance=header)
@@ -74,7 +80,11 @@ def edit(request, section):
         elif section == 'skills':
             form = SkillsForm(instance=skills)
         elif section == 'portfolio':
-            form = PortfolioForm(instance=portfolio)
+            if id is not None:
+                project = Portfolio.objects.get(id=id)
+                form = PortfolioForm(instance=project)
+            else:
+                form = PortfolioForm()
         elif section == 'services':
             form = ServicesForm(instance=services)
         elif section == 'testimonials':
@@ -82,6 +92,8 @@ def edit(request, section):
         elif section == 'contact':
             form = ContactForm(instance=contact)
     
+    portfolio = Portfolio.objects.all()
+
     context = {
     'header': header,
     'about': about,

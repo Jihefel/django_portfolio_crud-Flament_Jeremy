@@ -4,7 +4,7 @@ from django.db import models
 class Header(models.Model):
     full_name = models.CharField(max_length=150, blank=True)
     jobs = models.CharField(max_length=200, null=True, blank=True)
-    image_hero = models.URLField(blank=True)
+    image_hero = models.ImageField(blank=True)
     def __str__(self):
         return self.full_name
 
@@ -58,7 +58,8 @@ class Services(models.Model):
         return f"{self.icon} - {self.title}"
     
 class Testimonials(models.Model):
-    photo = models.URLField(blank=True)
+    description_te = models.CharField(max_length=200, blank=True)
+    photo = models.ImageField(blank=True)
     name = models.CharField(max_length=100, blank=True)
     job = models.CharField(max_length=50, blank=True)
     message = models.CharField(max_length=200, blank=True)

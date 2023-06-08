@@ -33,6 +33,10 @@ h6 {
   font-family: "Raleway", sans-serif;
 }
 
+input {
+  min-width: 500px;
+}
+
 /*--------------------------------------------------------------
 # Back to top button
 --------------------------------------------------------------*/
@@ -88,6 +92,11 @@ h6 {
   display: block;
   width: 120px;
   border: 8px solid #2c2f3f;
+  transition: 0.5s
+}
+
+#header .profile img:hover {
+  border: 8px solid #1c34b9;
 }
 
 #header .profile h1 {

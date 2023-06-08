@@ -17,10 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from portfolio import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('', views.index, name='index'),
     path('portfolio-details/<int:id>', views.portfolio_details, name='portfolio-details'),
     path('admin/', views.index_admin, name='admin'),
     path('admin/edit/<str:section>', views.edit, name='edit'),
+    path('admin/edit/<str:section>/<int:id>', views.edit, name='edit_details'),
 ]

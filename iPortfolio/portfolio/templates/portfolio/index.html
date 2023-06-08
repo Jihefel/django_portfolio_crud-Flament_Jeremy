@@ -309,10 +309,16 @@
         {% for project in portfolio %}
           <div class="col-lg-4 col-md-6 portfolio-item filter-{{project.category}}">
             <div class="portfolio-wrap">
-              <img src="{% static project.image %}" class="img-fluid" alt="">
+              {% if 'http' in project.image %}
+                  <img src="{{ project.image }}" class="img-fluid" alt="">
+              {% else %}
+                  <img src="{% static project.image %}" class="img-fluid" alt="">
+              {% endif %}
+
               <div class="portfolio-links">
-                <a href={% static project.image %} data-gallery="portfolioGallery" class="portfolio-lightbox" title="{{ project.title }}"><i class="bx bx-plus"></i></a>
+                <a href="{% if 'http' in project.image %}{{ project.image }}{% else %}{% static project.image.url %}{% endif %}" data-gallery="portfolioGallery" class="portfolio-lightbox" title="{{ project.title }}"><i class="bx bx-plus"></i></a>
                 <a href={% url 'portfolio-details' project.id %} title="More Details"><i class="bx bx-link"></i></a>
+                <a href="{% url 'edit_details' 'portfolio' project.id %}#portfolio"><i class="fa-solid fa-pen-to-square fa-2xs"></i></a>
               </div>
             </div>
           </div>
