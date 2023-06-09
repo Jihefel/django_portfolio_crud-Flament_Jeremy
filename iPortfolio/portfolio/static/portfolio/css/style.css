@@ -33,7 +33,7 @@ h6 {
   font-family: "Raleway", sans-serif;
 }
 
-input {
+input, textarea {
   width: 500px
 }
 

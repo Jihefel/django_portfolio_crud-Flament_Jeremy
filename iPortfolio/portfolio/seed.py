@@ -43,7 +43,7 @@ def run():
     # Portfolio
     seeder.add_entity(Portfolio, 12, {
         'description_po': lambda x: faker.paragraph(nb_sentences=3),
-        'image': lambda x: f'portfolio/img/portfolio/portfolio-{faker.random_int(min=1, max=9)}.jpg',
+        'image': lambda x: f'portfolio/portfolio-{faker.random_int(min=1, max=9)}.jpg',
         'title': lambda x: faker.sentence(nb_words=3),
         'category': lambda x: random.choice(['app', 'card', 'web']),
     })
@@ -58,7 +58,7 @@ def run():
     #Testimonials
     seeder.add_entity(Testimonials, 5, {
         'description_te': lambda x: faker.paragraph(nb_sentences=3),
-        'photo': lambda x: f'portfolio/img/testimonials/testimonials-{faker.random_int(min=1, max=5)}.jpg',
+        'photo': lambda x: f'testimonials/testimonials-{faker.random_int(min=1, max=5)}.jpg',
         'name': lambda x: faker.name(),
         'job': lambda x: faker.job(),
         'message': lambda x: faker.sentence(nb_words=50, variable_nb_words=True),

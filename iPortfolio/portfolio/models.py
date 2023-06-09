@@ -3,15 +3,15 @@ from django.db import models
 # Create your models here.
 class Header(models.Model):
     full_name = models.CharField(max_length=150, blank=True)
-    jobs = models.CharField(max_length=200, null=True, blank=True)
+    jobs = models.TextField(null=True, blank=True)
     image_hero = models.ImageField(blank=True)
     def __str__(self):
         return self.full_name
 
 class About(models.Model):
-    description1_ab = models.CharField(max_length=200, blank=True)
-    description2_ab = models.CharField(max_length=50, blank=True)
-    description3_ab = models.CharField(max_length=400, blank=True)
+    description1_ab = models.TextField(blank=True)
+    description2_ab = models.TextField(blank=True)
+    description3_ab = models.TextField(blank=True)
     job = models.CharField(max_length=200, blank=True)
     birthday = models.DateField(blank=True)
     website = models.URLField(blank=True)
@@ -25,7 +25,7 @@ class About(models.Model):
         return self.description1_ab
 
 class Skills(models.Model):
-    description1_sk = models.CharField(max_length=200, blank=True)
+    description1_sk = models.TextField(blank=True)
     html = models.IntegerField(blank=True)
     css = models.IntegerField(blank=True)
     js = models.IntegerField(blank=True)
@@ -36,8 +36,8 @@ class Skills(models.Model):
         return self.description1_sk
 
 class Portfolio(models.Model):
-    description_po = models.CharField(max_length=200, blank=True)
-    image = models.URLField(blank=True)
+    description_po = models.TextField(blank=True)
+    image = models.ImageField(blank=True)
     title = models.CharField(max_length=100, blank=True)
     CATEGORY_CHOICES = (
         ('app', 'App'),
@@ -50,15 +50,15 @@ class Portfolio(models.Model):
         return f"{self.title} - {self.category}"
     
 class Services(models.Model):
-    description_se = models.CharField(max_length=200, blank=True)
     icon = models.TextField(blank=True)
     title = models.CharField(max_length=100, blank=True)
+    description_se = models.TextField(blank=True)
 
     def __str__(self):
         return f"{self.icon} - {self.title}"
     
 class Testimonials(models.Model):
-    description_te = models.CharField(max_length=200, blank=True)
+    description_te = models.TextField(blank=True)
     photo = models.ImageField(blank=True)
     name = models.CharField(max_length=100, blank=True)
     job = models.CharField(max_length=50, blank=True)
@@ -67,7 +67,7 @@ class Testimonials(models.Model):
         return self.name
 
 class Contact(models.Model):
-    description_co = models.CharField(max_length=200, blank=True)
+    description_co = models.TextField(blank=True)
     address = models.CharField(max_length=200, blank=True)
     email = models.EmailField(blank=True)
     phone = models.CharField(max_length=30, blank=True)
