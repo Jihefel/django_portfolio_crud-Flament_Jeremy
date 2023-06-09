@@ -62,7 +62,7 @@ class Testimonials(models.Model):
     photo = models.ImageField(blank=True)
     name = models.CharField(max_length=100, blank=True)
     job = models.CharField(max_length=50, blank=True)
-    message = models.CharField(max_length=200, blank=True)
+    message = models.TextField(blank=True)
     def __str__(self):
         return self.name
 
@@ -74,3 +74,8 @@ class Contact(models.Model):
     def __str__(self):
         return self.description_co
     
+class SendMessage(models.Model):
+    name = models.CharField(max_length=200)
+    email = models.EmailField()
+    subject = models.CharField(max_length=200)
+    message = models.TextField()

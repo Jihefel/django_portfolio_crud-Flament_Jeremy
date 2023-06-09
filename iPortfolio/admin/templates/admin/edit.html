@@ -385,16 +385,17 @@
         {% for project in portfolio %}
           <div class="col-lg-4 col-md-6 portfolio-item filter-{{project.category}}">
             <div class="portfolio-wrap">
-              {% if 'http' in project.image %}
+              {% if 'https' in project.image %}
                   <img src="{{ project.image }}" class="img-fluid" alt="">
               {% else %}
                   <img src="{% static project.image %}" class="img-fluid" alt="">
               {% endif %}
 
               <div class="portfolio-links">
-                <a href="{% if 'http' in project.image %}{{ project.image }}{% else %}{% static project.image.url %}{% endif %}" data-gallery="portfolioGallery" class="portfolio-lightbox" title="{{ project.title }}"><i class="bx bx-plus"></i></a>
+                <a href="{% if 'http' in project.image %}{{ project.image }}{% else %}{% static project.image %}{% endif %}" data-gallery="portfolioGallery" class="portfolio-lightbox" title="{{ project.title }}"><i class="bx bx-plus"></i></a>
                 <a href={% url 'portfolio-details' project.id %} title="More Details"><i class="bx bx-link"></i></a>
                 <a href="{% url 'edit_details' 'portfolio' project.id %}#portfolio"><i class="fa-solid fa-pen-to-square fa-2xs"></i></a>
+                <a href="{% url 'delete' 'portfolio' project.id %}#portfolio"><i class="fa-solid fa-trash fa-2xs"></i></a>
               </div>
             </div>
           </div>
@@ -408,60 +409,91 @@
     {% endif %}
 
     <!-- ======= Services Section ======= -->
+    {% if section == 'services' %}
     <section id="services" class="services">
       <div class="container">
-        <a href="{% url 'edit' 'services' %}#services"><button class="btn btn-dark mb-4">Edit 'Services'</button></a>
+        
         <div class="section-title">
           <h2>Services</h2>
-          {% for service in services %}
-            {% if forloop.last %}
-                <p>{{ service.description_se }}</p>
-            {% endif %}
-          {% endfor %}
         </div>
 
-        <div class="row">
-        {% for service in services %}
-          <div class="col-lg-4 col-md-6 icon-box" data-aos="fade-up">
-            <div class="icon">{{service.icon|safe}}</div>
-            <h4 class="title"><a href="">{{service.title}}</a></h4>
-            <p class="description">{{service.description_se}}</p>
-          </div>
-        {% endfor %}
-          {% comment %} <div class="col-lg-4 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="100">
-            <div class="icon"><i class="bi bi-card-checklist"></i></div>
-            <h4 class="title"><a href="">Dolor Sitema</a></h4>
-            <p class="description">Minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat tarad limino ata</p>
-          </div>
-          <div class="col-lg-4 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="200">
-            <div class="icon"><i class="bi bi-bar-chart"></i></div>
-            <h4 class="title"><a href="">Sed ut perspiciatis</a></h4>
-            <p class="description">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur</p>
-          </div>
-          <div class="col-lg-4 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="300">
-            <div class="icon"><i class="bi bi-binoculars"></i></div>
-            <h4 class="title"><a href="">Magni Dolores</a></h4>
-            <p class="description">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
-          </div>
-          <div class="col-lg-4 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="400">
-            <div class="icon"><i class="bi bi-brightness-high"></i></div>
-            <h4 class="title"><a href="">Nemo Enim</a></h4>
-            <p class="description">At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque</p>
-          </div>
-          <div class="col-lg-4 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="500">
-            <div class="icon"><i class="bi bi-calendar4-week"></i></div>
-            <h4 class="title"><a href="">Eiusmod Tempor</a></h4>
-            <p class="description">Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi</p>
-          </div> {% endcomment %}
+        <form method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          {{form.as_p}}
+          <button type="submit" class="btn btn-dark">Confirm</button>
+        </form>
+          
         </div>
 
       </div>
     </section><!-- End Services Section -->
+    {% else %}
+    <section id="services" class="services">
+      <div class="container">
+          
+          <div class="section-title">
+              <h2>Services</h2>
+              {% for service in services %}
+                {% if forloop.last %}
+                    <p>{{ service.description_se }}</p>
+                {% endif %}
+              {% endfor %}
+              {% if services.has_previous %}
+                  <a href="?page={{ services.previous_page_number }}">Précédent</a>
+              {% endif %}
+              {% if services.has_next %}
+                  <a href="?page={{ services.next_page_number }}">Suivant</a>
+              {% endif %}
+          </div>
+
+          <div class="row">
+              {% for service in services %}
+                  <div class="col-lg-4 col-md-6 icon-box" data-aos="fade-up">
+                      <a href="{% url 'edit_details' 'services' service.id %}#services"><div class="icon">{{service.icon|safe}}</div></a>
+                      <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="title"><a href="{% url 'edit_details' 'services' service.id %}#services">{{service.title}}</a></h4>
+                        <a href="{% url 'delete' 'services' service.id %}#services"><button class="btn btn-dark rounded-circle mb-3 me-3"><i class="fa-solid fa-trash"></i></button></a>
+                      </div>
+                      <p class="description">{{service.description_se}}</p>
+                  </div>
+              {% endfor %}
+          </div>
+
+          <div class="section-title">
+              <!-- Afficher les liens de pagination en bas de la liste des services -->
+              {% if services.has_previous %}
+                  <a href="?page={{ services.previous_page_number }}">Précédent</a>
+              {% endif %}
+              {% if services.has_next %}
+                  <a href="?page={{ services.next_page_number }}">Suivant</a>
+              {% endif %}
+          </div>
+
+        </div>
+      </section><!-- End Services Section -->
+    {% endif %}
 
     <!-- ======= Testimonials Section ======= -->
+    {% if section == 'testimonials' %}
     <section id="testimonials" class="testimonials section-bg">
       <div class="container">
-        <a href="{% url 'edit' 'testimonials' %}#testimonials"><button class="btn btn-dark mb-4">Edit 'Testimonials'</button></a>
+        
+        <div class="section-title">
+          <h2>Testimonials</h2>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          {{form.as_p}}
+          <button type="submit" class="btn btn-dark">Confirm</button>
+        </form>
+
+      </div>
+    </section><!-- End Testimonials Section -->
+    {% else %}
+    <section id="testimonials" class="testimonials section-bg">
+      <div class="container">
+        
         <div class="section-title">
           <h2>Testimonials</h2>
           {% for test in testimonials %}
@@ -489,57 +521,6 @@
             </div><!-- End testimonial item -->
           {% endfor %}
 
-            {% comment %} <div class="swiper-slide">
-              <div class="testimonial-item" data-aos="fade-up" data-aos-delay="100">
-                <p>
-                  <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                  Export tempor illum tamen malis malis eram quae irure esse labore quem cillum quid cillum eram malis quorum velit fore eram velit sunt aliqua noster fugiat irure amet legam anim culpa.
-                  <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-                </p>
-                <img src={% static 'portfolio/img/testimonials/testimonials-2.jpg' %} class="testimonial-img" alt="">
-                <h3>Sara Wilsson</h3>
-                <h4>Designer</h4>
-              </div>
-            </div><!-- End testimonial item -->
-
-            <div class="swiper-slide">
-              <div class="testimonial-item" data-aos="fade-up" data-aos-delay="200">
-                <p>
-                  <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                  Enim nisi quem export duis labore cillum quae magna enim sint quorum nulla quem veniam duis minim tempor labore quem eram duis noster aute amet eram fore quis sint minim.
-                  <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-                </p>
-                <img src={% static 'portfolio/img/testimonials/testimonials-3.jpg' %} class="testimonial-img" alt="">
-                <h3>Jena Karlis</h3>
-                <h4>Store Owner</h4>
-              </div>
-            </div><!-- End testimonial item -->
-
-            <div class="swiper-slide">
-              <div class="testimonial-item" data-aos="fade-up" data-aos-delay="300">
-                <p>
-                  <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                  Fugiat enim eram quae cillum dolore dolor amet nulla culpa multos export minim fugiat minim velit minim dolor enim duis veniam ipsum anim magna sunt elit fore quem dolore labore illum veniam.
-                  <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-                </p>
-                <img src={% static 'portfolio/img/testimonials/testimonials-4.jpg' %} class="testimonial-img" alt="">
-                <h3>Matt Brandon</h3>
-                <h4>Freelancer</h4>
-              </div>
-            </div><!-- End testimonial item -->
-
-            <div class="swiper-slide">
-              <div class="testimonial-item" data-aos="fade-up" data-aos-delay="400">
-                <p>
-                  <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                  Quis quorum aliqua sint quem legam fore sunt eram irure aliqua veniam tempor noster veniam enim culpa labore duis sunt culpa nulla illum cillum fugiat legam esse veniam culpa fore nisi cillum quid.
-                  <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-                </p>
-                <img src={% static 'portfolio/img/testimonials/testimonials-5.jpg' %} class="testimonial-img" alt="">
-                <h3>John Larson</h3>
-                <h4>Entrepreneur</h4>
-              </div>
-            </div><!-- End testimonial item --> {% endcomment %}
 
           </div>
           <div class="swiper-pagination"></div>
@@ -547,8 +528,26 @@
 
       </div>
     </section><!-- End Testimonials Section -->
+    {% endif %}
 
     <!-- ======= Contact Section ======= -->
+    {% if section == 'contact' %}
+    <section id="contact" class="contact">
+      <div class="container">
+        
+        <div class="section-title">
+          <h2>Contact</h2>
+        </div>
+
+         <form method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          {{form.as_p}}
+          <button type="submit" class="btn btn-dark">Confirm</button>
+        </form>
+
+      </div>
+    </section><!-- End Contact Section -->
+    {% else %}
     <section id="contact" class="contact">
       <div class="container">
         <a href="{% url 'edit' 'contact' %}#contact"><button class="btn btn-dark mb-4">Edit 'Contact'</button></a>
@@ -585,38 +584,24 @@
           </div>
 
           <div class="col-lg-7 mt-5 mt-lg-0 d-flex align-items-stretch">
-            <form action="forms/contact.php" method="post" role="form" class="php-email-form">
-              <div class="row">
-                <div class="form-group col-md-6">
-                  <label for="name">Your Name</label>
-                  <input type="text" name="name" class="form-control" id="name" required>
-                </div>
-                <div class="form-group col-md-6">
-                  <label for="name">Your Email</label>
-                  <input type="email" class="form-control" name="email" id="email" required>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="name">Subject</label>
-                <input type="text" class="form-control" name="subject" id="subject" required>
-              </div>
-              <div class="form-group">
-                <label for="name">Message</label>
-                <textarea class="form-control" name="message" rows="10" required></textarea>
-              </div>
-              <div class="my-3">
-                <div class="loading">Loading</div>
-                <div class="error-message"></div>
-                <div class="sent-message">Your message has been sent. Thank you!</div>
-              </div>
-              <div class="text-center"><button type="submit">Send Message</button></div>
-            </form>
+            <div class="php-email-form">
+            {% if messages|length == 0 %}
+              <p>Aucun message à lire</p>
+            {% else %}
+              <ul>
+              {% for message in messages %}
+                <li>
+                  {{message.name}} - {{message.email}} - {{message.subject}}
+                  <p>{{message.message}}</p>
+                </li>
+              {% endfor %}
+              </ul>
+            {% endif %}
+            </div>
           </div>
-
-        </div>
-
       </div>
     </section><!-- End Contact Section -->
+    {% endif %}
 
   </main><!-- End #main -->
 

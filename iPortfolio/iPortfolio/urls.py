@@ -26,4 +26,5 @@ urlpatterns = [
     path('admin/', views.index_admin, name='admin'),
     path('admin/edit/<str:section>', views.edit, name='edit'),
     path('admin/edit/<str:section>/<int:id>', views.edit, name='edit_details'),
+    path('admin/delete/<str:section>/<str:property>', views.delete, name='delete')
 ]

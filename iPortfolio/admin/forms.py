@@ -1,5 +1,5 @@
 from django import forms
-from portfolio.models import Header, About, Skills, Portfolio, Services, Testimonials, Contact
+from portfolio.models import Header, About, Skills, Portfolio, Services, Testimonials, Contact, SendMessage
 
 class HeaderForm(forms.ModelForm):
     class Meta:
@@ -34,4 +34,9 @@ class TestimonialsForm(forms.ModelForm):
 class ContactForm(forms.ModelForm):
     class Meta:
         model = Contact
+        fields = '__all__'
+
+class SendMessageForm(forms.ModelForm):
+    class Meta:
+        model = SendMessage
         fields = '__all__'

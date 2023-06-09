@@ -1,19 +1,37 @@
 from django.shortcuts import render, redirect
-from .models import Header, About, Skills, Portfolio, Services, Testimonials, Contact
-from admin.forms import HeaderForm, AboutForm, PortfolioForm, SkillsForm, ServicesForm, TestimonialsForm, ContactForm
+from django.core.paginator import Paginator
+from .models import Header, About, Skills, Portfolio, Services, Testimonials, Contact, SendMessage
+from admin.forms import HeaderForm, AboutForm, PortfolioForm, SkillsForm, ServicesForm, TestimonialsForm, ContactForm, SendMessageForm
 
 header = Header.objects.last()
 about = About.objects.last()
 skills = Skills.objects.last()
 portfolio = Portfolio.objects.all()
-services = Services.objects.all()
+all_services = Services.objects.all()
 testimonials = Testimonials.objects.all()
 contact = Contact.objects.last()
+messages = SendMessage.objects.all()
 
 
 # Create your views here.
 def index(request):
     portfolio = Portfolio.objects.all()
+    paginator = Paginator(all_services, 6)  # Divise les services en pages de 6 éléments par page
+    page_number = request.GET.get('page')  # Récupère le numéro de page à partir des paramètres GET
+
+    services = paginator.get_page(page_number)  # Récupère les services pour la page spécifiée
+
+
+    if request.method == 'POST':
+        form = SendMessageForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('index')
+    else:
+        form = SendMessageForm()
+
+    messages = SendMessage.objects.all()
+
     context = {
     'header': header,
     'about': about,
@@ -21,11 +39,18 @@ def index(request):
     'portfolio': portfolio,
     'services': services,
     'testimonials': testimonials,
-    'contact': contact
-}
+    'contact': contact,
+    'messages': messages,
+    'form': form
+    }
+
     return render(request, 'portfolio/index.html', context)
 
 def navbar(request):
+    paginator = Paginator(all_services, 6)  # Divise les services en pages de 6 éléments par page
+    page_number = request.GET.get('page')  # Récupère le numéro de page à partir des paramètres GET
+
+    services = paginator.get_page(page_number)  # Récupère les services pour la page spécifiée
     context = {
     'header': header,
     'about': about,
@@ -33,7 +58,8 @@ def navbar(request):
     'portfolio': portfolio,
     'services': services,
     'testimonials': testimonials,
-    'contact': contact
+    'contact': contact,
+    'messages': messages
 }
     return render(request, 'portfolio/header.html', context)
 
@@ -42,10 +68,16 @@ def portfolio_details(request, id):
     return render(request, 'portfolio/portfolio-details.html', {'project': project})
 
 
+
 # Admin
 
 def edit(request, section, id=None):
     form = None
+    paginator = Paginator(all_services, 6)  # Divise les services en pages de 6 éléments par page
+    page_number = request.GET.get('page')  # Récupère le numéro de page à partir des paramètres GET
+
+    services = paginator.get_page(page_number)  # Récupère les services pour la page spécifiée
+
     if request.method == 'POST':
         if section == 'header':
             form = HeaderForm(request.POST, instance=header)
@@ -60,9 +92,17 @@ def edit(request, section, id=None):
             else:
                 form = PortfolioForm()
         elif section == 'services':
-            form = ServicesForm(request.POST, instance=services)
+            if id is not None:
+                service = Services.objects.get(id=id)
+                form = ServicesForm(request.POST, instance=service)
+            else:
+                form = ServicesForm()
         elif section == 'testimonials':
-            form = TestimonialsForm(request.POST, instance=testimonials)
+            if id is not None:
+                testi = Testimonials.objects.get(id=id)
+                form = TestimonialsForm(request.POST, instance=testi)
+            else:
+                form = TestimonialsForm()
         elif section == 'contact':
             form = ContactForm(request.POST, instance=contact)
         
@@ -86,13 +126,22 @@ def edit(request, section, id=None):
             else:
                 form = PortfolioForm()
         elif section == 'services':
-            form = ServicesForm(instance=services)
+            if id is not None:
+                service = Services.objects.get(id=id)
+                form = ServicesForm(instance=service)
+            else:
+                form = ServicesForm()
         elif section == 'testimonials':
-            form = TestimonialsForm(instance=testimonials)
+            if id is not None:
+                testi = Testimonials.objects.get(id=id)
+                form = TestimonialsForm(instance=testi)
+            else:
+                form = TestimonialsForm()
         elif section == 'contact':
             form = ContactForm(instance=contact)
     
     portfolio = Portfolio.objects.all()
+    services = Services.objects.all()
 
     context = {
     'header': header,
@@ -102,6 +151,7 @@ def edit(request, section, id=None):
     'services': services,
     'testimonials': testimonials,
     'contact': contact,
+    'messages': messages,
     'form' : form,
     'section': section
     }
@@ -110,6 +160,15 @@ def edit(request, section, id=None):
 
 
 def index_admin(request):
+    paginator = Paginator(all_services, 6)  # Divise les services en pages de 6 éléments par page
+    page_number = request.GET.get('page')  # Récupère le numéro de page à partir des paramètres GET
+
+    services = paginator.get_page(page_number)  # Récupère les services pour la page spécifiée
+    portfolio = Portfolio.objects.all()
+    testimonials = Testimonials.objects.all()
+    messages = SendMessage.objects.all()
+
+
     context = {
     'header': header,
     'about': about,
@@ -117,11 +176,18 @@ def index_admin(request):
     'portfolio': portfolio,
     'services': services,
     'testimonials': testimonials,
-    'contact': contact
-}
+    'contact': contact,
+    'messages': messages,
+    }
+
     return render(request, 'admin/index.html', context)
 
 def navbar_admin(request):
+    paginator = Paginator(all_services, 6)  # Divise les services en pages de 6 éléments par page
+    page_number = request.GET.get('page')  # Récupère le numéro de page à partir des paramètres GET
+
+    services = paginator.get_page(page_number)  # Récupère les services pour la page spécifiée
+
     context = {
     'header': header,
     'about': about,
@@ -129,7 +195,31 @@ def navbar_admin(request):
     'portfolio': portfolio,
     'services': services,
     'testimonials': testimonials,
-    'contact': contact
-}
+    'contact': contact,
+    'messages': messages,
+    }
+
+
     return render(request, 'admin/header.html', context)
 
+
+def delete(request, section, property):
+        
+    if section == 'portfolio':
+        if property is not None:
+            project = Portfolio.objects.get(id=property)
+            project.delete()
+    elif section == 'services':
+        if property is not None:
+            service = Services.objects.get(id=property)
+            service.delete()
+    elif section == 'testimonials':
+        if property is not None:
+            testi = Testimonials.objects.get(id=property)
+            testi.delete()
+    elif section == 'contact':
+        if property is not None:
+            message = SendMessage.objects.get(id=property)
+            message.delete()
+            
+    return redirect('admin')
