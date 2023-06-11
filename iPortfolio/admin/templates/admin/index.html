@@ -40,7 +40,7 @@
 
 {% block content %}
   <!-- ======= Hero Section ======= -->
-  <section id="hero" class="d-flex flex-column justify-content-center align-items-center">
+    <section id="hero" class="d-flex flex-column justify-content-center align-items-center" style="background: url({% static header.image_hero.url %}) top center; background-size: cover">
     <div class="hero-container" data-aos="fade-in">
       <h1>{{ header.full_name }}</h1>
       <p>I'm <span class="typed" data-typed-items="{{header.jobs}}"></span></p>
@@ -61,7 +61,7 @@
 
         <div class="row">
           <div class="col-lg-4" data-aos="fade-right">
-            <img src={% static 'portfolio/img/profile-img.jpg' %} class="img-fluid" alt="">
+            <img src={% static about.photo.url %} class="img-fluid" alt="">
           </div>
           <div class="col-lg-8 pt-4 pt-lg-0 content" data-aos="fade-left">
             <h3>{{about.job}}</h3>
@@ -287,11 +287,10 @@
 
         <div class="section-title">
           <h2>Portfolio</h2>
-          {% for project in portfolio %}
-            {% if forloop.last %}
-                <p>{{ project.description_po }}</p>
-            {% endif %}
-          {% endfor %}
+          <div class="description d-flex align-items-center">
+            <p>{{ portfolio_description.description_portfolio }}</p> 
+            <a href="{% url 'edit' 'portfolio_description' %}#portfolio"><button class="btn btn-dark ms-3"><i class="fa-solid fa-pen-to-square"></i></button></a>
+          </div>
         </div>
 
         <div class="row" data-aos="fade-up">
@@ -340,11 +339,10 @@
           
           <div class="section-title">
               <h2>Services</h2>
-              {% for service in services %}
-                {% if forloop.last %}
-                    <p>{{ service.description_se }}</p>
-                {% endif %}
-              {% endfor %}
+              <div class="description d-flex align-items-center ms-0">
+                <p>{{ services_description.description_services }}</p> 
+                <a href="{% url 'edit' 'services_description' %}#services"><button class="btn btn-dark ms-3"><i class="fa-solid fa-pen-to-square"></i></button></a>
+              </div>
               {% if services.has_previous %}
                   <a href="?page={{ services.previous_page_number }}">Précédent</a>
               {% endif %}
@@ -387,11 +385,10 @@
         
         <div class="section-title">
           <h2>Testimonials</h2>
-          {% for testi in testimonials %}
-            {% if forloop.last %}
-                <p>{{ testi.description_te }}</p>
-            {% endif %}
-          {% endfor %}
+          <div class="description d-flex align-items-center">
+            <p>{{ testimonials_description.description_testimonials }}</p> 
+            <a href="{% url 'edit' 'testimonials_description' %}#testimonials"><button class="btn btn-dark ms-3"><i class="fa-solid fa-pen-to-square"></i></button></a>
+          </div>
         </div>
 
         <div class="mb-5"><a href="{% url 'create' 'testimonials' %}#testimonials"><button class="btn btn-dark"><i class="fa-solid fa-plus"></i> Add a testimonial</button></a></div>

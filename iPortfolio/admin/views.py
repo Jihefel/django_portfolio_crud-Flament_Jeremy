@@ -1,21 +1,25 @@
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
-from portfolio.models import Header, About, Skills, Portfolio, Services, Testimonials, Contact, SendMessage
-from .forms import HeaderForm, AboutForm, PortfolioForm, SkillsForm, ServicesForm, TestimonialsForm, ContactForm, SendMessageForm
+from portfolio.models import Header, About, Skills, Portfolio, Services, Testimonials, Contact, SendMessage, Portfolio_description, Services_description, Testimonials_description
+from .forms import HeaderForm, AboutForm, PortfolioForm, SkillsForm, ServicesForm, TestimonialsForm, ContactForm, PortfolioDescriptionForm, ServicesDescriptionForm, TestimonialsDescriptionForm
 
-
-header = Header.objects.last()
-about = About.objects.last()
-skills = Skills.objects.last()
-portfolio = Portfolio.objects.all()
-all_services = Services.objects.all()
-testimonials = Testimonials.objects.all()
-contact = Contact.objects.last()
-messages = SendMessage.objects.all()
 
 # Admin
 
 def edit(request, section, id=None):
+
+    header = Header.objects.last()
+    about = About.objects.last()
+    skills = Skills.objects.last()
+    portfolio = Portfolio.objects.all()
+    portfolio_description = Portfolio_description.objects.last()
+    all_services = Services.objects.all()
+    services_description = Services_description.objects.last()
+    testimonials = Testimonials.objects.all()
+    testimonials_description = Testimonials_description.objects.last()
+    contact = Contact.objects.last()
+    messages = SendMessage.objects.all()
+
     form = None
     paginator = Paginator(all_services, 6)  # Divise les services en pages de 6 éléments par page
     page_number = request.GET.get('page')  # Récupère le numéro de page à partir des paramètres GET
@@ -26,7 +30,7 @@ def edit(request, section, id=None):
         if section == 'header':
             form = HeaderForm(request.POST, request.FILES, instance=header)
         elif section == 'about':
-            form = AboutForm(request.POST, instance=about)
+            form = AboutForm(request.POST, request.FILES, instance=about)
         elif section == 'skills':
             form = SkillsForm(request.POST, instance=skills)
         elif section == 'portfolio':
@@ -35,18 +39,24 @@ def edit(request, section, id=None):
                 form = PortfolioForm(request.POST, request.FILES, instance=project)
             else:
                 form = PortfolioForm()
+        elif section == 'portfolio_description':
+            form = PortfolioDescriptionForm(request.POST, instance=portfolio_description)
         elif section == 'services':
             if id is not None:
                 service = Services.objects.get(id=id)
                 form = ServicesForm(request.POST, instance=service)
             else:
                 form = ServicesForm()
+        elif section == 'services_description':
+            form = ServicesDescriptionForm(request.POST, instance=services_description)
         elif section == 'testimonials':
             if id is not None:
                 testi = Testimonials.objects.get(id=id)
                 form = TestimonialsForm(request.POST, request.FILES, instance=testi)
             else:
                 form = TestimonialsForm()
+        elif section == 'testimonials_description':
+            form = TestimonialsDescriptionForm(request.POST, instance=testimonials_description)
         elif section == 'contact':
             form = ContactForm(request.POST, instance=contact)
         
@@ -69,18 +79,24 @@ def edit(request, section, id=None):
                 form = PortfolioForm(instance=project)
             else:
                 form = PortfolioForm()
+        elif section == 'portfolio_description':
+            form = PortfolioDescriptionForm(instance=portfolio_description)
         elif section == 'services':
             if id is not None:
                 service = Services.objects.get(id=id)
                 form = ServicesForm(instance=service)
             else:
                 form = ServicesForm()
+        elif section == 'services_description':
+            form = ServicesDescriptionForm(instance=services_description)
         elif section == 'testimonials':
             if id is not None:
                 testi = Testimonials.objects.get(id=id)
                 form = TestimonialsForm(instance=testi)
             else:
                 form = TestimonialsForm()
+        elif section == 'testimonials_description':
+            form = TestimonialsDescriptionForm(instance=testimonials_description)
         elif section == 'contact':
             form = ContactForm(instance=contact)
     
@@ -92,8 +108,11 @@ def edit(request, section, id=None):
     'about': about,
     'skills': skills,
     'portfolio': portfolio,
+    'portfolio_description': portfolio_description,
     'services': services,
+    'services_description': services_description,
     'testimonials': testimonials,
+    'testimonials_description': testimonials_description,
     'contact': contact,
     'messages': messages,
     'form' : form,
@@ -104,6 +123,18 @@ def edit(request, section, id=None):
 
 
 def index_admin(request):
+
+    header = Header.objects.last()
+    about = About.objects.last()
+    skills = Skills.objects.last()
+    portfolio = Portfolio.objects.all()
+    portfolio_description = Portfolio_description.objects.last()
+    all_services = Services.objects.all()
+    services_description = Services_description.objects.last()
+    testimonials = Testimonials.objects.all()
+    testimonials_description = Testimonials_description.objects.last()
+    contact = Contact.objects.last()
+    messages = SendMessage.objects.all()
 
     paginator = Paginator(all_services, 6)  # Divise les services en pages de 6 éléments par page
     page_number = request.GET.get('page')  # Récupère le numéro de page à partir des paramètres GET
@@ -119,8 +150,11 @@ def index_admin(request):
     'about': about,
     'skills': skills,
     'portfolio': portfolio,
+    'portfolio_description': portfolio_description,
     'services': services,
+    'services_description': services_description,
     'testimonials': testimonials,
+    'testimonials_description': testimonials_description,
     'contact': contact,
     'messages': messages,
     }
@@ -129,6 +163,18 @@ def index_admin(request):
 
 
 def navbar_admin(request):
+    header = Header.objects.last()
+    about = About.objects.last()
+    skills = Skills.objects.last()
+    portfolio = Portfolio.objects.all()
+    portfolio_description = Portfolio_description.objects.last()
+    all_services = Services.objects.all()
+    services_description = Services_description.objects.last()
+    testimonials = Testimonials.objects.all()
+    testimonials_description = Testimonials_description.objects.last()
+    contact = Contact.objects.last()
+    messages = SendMessage.objects.all()
+
     paginator = Paginator(all_services, 6)  # Divise les services en pages de 6 éléments par page
     page_number = request.GET.get('page')  # Récupère le numéro de page à partir des paramètres GET
 
@@ -139,8 +185,11 @@ def navbar_admin(request):
     'about': about,
     'skills': skills,
     'portfolio': portfolio,
+    'portfolio_description': portfolio_description,
     'services': services,
+    'services_description': services_description,
     'testimonials': testimonials,
+    'testimonials_description': testimonials_description,
     'contact': contact,
     'messages': messages,
     }
@@ -172,6 +221,18 @@ def delete(request, section, property):
 
 
 def create(request, section):
+    header = Header.objects.last()
+    about = About.objects.last()
+    skills = Skills.objects.last()
+    portfolio = Portfolio.objects.all()
+    portfolio_description = Portfolio_description.objects.last()
+    all_services = Services.objects.all()
+    services_description = Services_description.objects.last()
+    testimonials = Testimonials.objects.all()
+    testimonials_description = Testimonials_description.objects.last()
+    contact = Contact.objects.last()
+    messages = SendMessage.objects.all()
+    
     form = None
     paginator = Paginator(all_services, 6)  # Divise les services en pages de 6 éléments par page
     page_number = request.GET.get('page')  # Récupère le numéro de page à partir des paramètres GET
@@ -218,8 +279,11 @@ def create(request, section):
     'about': about,
     'skills': skills,
     'portfolio': portfolio,
+    'portfolio_description': portfolio_description,
     'services': services,
+    'services_description': services_description,
     'testimonials': testimonials,
+    'testimonials_description': testimonials_description,
     'contact': contact,
     'messages': messages,
     'form' : form,

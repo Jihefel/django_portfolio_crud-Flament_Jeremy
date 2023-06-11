@@ -7,7 +7,7 @@
     <div class="d-flex flex-column">
 
       <div class="profile">
-        <img src={% static 'portfolio/img/profile-img.jpg' %} alt="" class="img-fluid rounded-circle">
+        <img src={% static about.photo.url %} alt="" class="img-fluid rounded-circle">
         <h1 class="text-light">
           <a href="index.html">
             {{ header.full_name }}
@@ -29,6 +29,7 @@
           <li><a href="#resume" class="nav-link scrollto"><i class="bx bx-file-blank"></i> <span>Resume</span></a></li>
           <li><a href="#portfolio" class="nav-link scrollto"><i class="bx bx-book-content"></i> <span>Portfolio</span></a></li>
           <li><a href="#services" class="nav-link scrollto"><i class="bx bx-server"></i> <span>Services</span></a></li>
+          <li><a href="#testimonials" class="nav-link scrollto"><i class="fa-solid fa-comment"></i> <span>Testimonials</span></a></li>
           <li><a href="#contact" class="nav-link scrollto"><i class="bx bx-envelope"></i> <span>Contact</span></a></li>
         </ul>
       </nav><!-- .nav-menu -->

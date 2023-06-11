@@ -1,5 +1,5 @@
 from django import forms
-from portfolio.models import Header, About, Skills, Portfolio, Services, Testimonials, Contact, SendMessage
+from portfolio.models import Header, About, Skills, Portfolio, Services, Testimonials, Contact, SendMessage, Portfolio_description, Services_description, Testimonials_description
 
 class HeaderForm(forms.ModelForm):
     class Meta:
@@ -21,14 +21,29 @@ class PortfolioForm(forms.ModelForm):
         model = Portfolio
         fields = '__all__'
 
+class PortfolioDescriptionForm(forms.ModelForm):
+    class Meta:
+        model = Portfolio_description
+        fields = '__all__'
+
 class ServicesForm(forms.ModelForm):
     class Meta:
         model = Services
         fields = '__all__'
 
+class ServicesDescriptionForm(forms.ModelForm):
+    class Meta:
+        model = Services_description
+        fields = '__all__'
+
 class TestimonialsForm(forms.ModelForm):
     class Meta:
         model = Testimonials
+        fields = '__all__'
+
+class TestimonialsDescriptionForm(forms.ModelForm):
+    class Meta:
+        model = Testimonials_description
         fields = '__all__'
 
 class ContactForm(forms.ModelForm):

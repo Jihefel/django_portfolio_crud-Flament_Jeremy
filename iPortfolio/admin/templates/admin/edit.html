@@ -41,7 +41,7 @@
 {% block content %}
   <!-- ======= Hero Section ======= -->
   {% if section == 'header' %}
-  <section id="hero" class="d-flex flex-column justify-content-center align-items-center">
+    <section id="hero" class="d-flex flex-column justify-content-center align-items-center" style="background: url({% static header.image_hero.url %}) top center; background-size: cover">
     <div class="hero-container" data-aos="fade-in">
       <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
@@ -53,15 +53,15 @@
         <label for="header-jobs" class="form-label text-white">Jobs</label>
         <input type="text" class="form-control" id="header-jobs" placeholder="{{header.jobs}}" value="{{header.jobs}}" size="100" name="jobs"></div>
         <div class="mb-3">
-        <label for="header-image_hero" class="form-label text-white">Image Hero</label>
-        <input type="file" class="form-control" id="header-image_hero" placeholder="{{header.image_hero}}" value="{{header.image_hero}}" name="image_hero" ></div>
+        <label for="header-image_hero" class="form-label text-white">Image Hero : <b>Currently:</b> <i>{{header.image_hero}}</i></label>
+        <input type="file" class="form-control" id="header-image_hero" placeholder="{{header.image_hero}}" value="{{header.image_hero}}" name="image_hero"></div>
         <button type="submit" class="btn btn-dark">Confirm</button>
       </form>
     </div>
   </section><!-- End Hero -->
   {% else %}
   <!-- ======= Hero Section ======= -->
-  <section id="hero" class="d-flex flex-column justify-content-center align-items-center">
+    <section id="hero" class="d-flex flex-column justify-content-center align-items-center" style="background: url({% static header.image_hero.url %}) top center; background-size: cover">
     <div class="hero-container" data-aos="fade-in">
       <h1>{{ header.full_name }}</h1>
       <p>I'm <span class="typed" data-typed-items="{{header.jobs}}"></span></p>
@@ -76,14 +76,14 @@
 <!-- ======= About Section ======= -->
     <section id="about" class="about">
       <div class="container">
-      <div class="section-title">
-        <h2>About</h2>
-      </div>
-      <form method="POST">
-        {% csrf_token %}
-        {{form.as_p}}
-        <button type="submit" class="btn btn-dark">Confirm</button>
-      </form>
+        <div class="section-title">
+          <h2>About</h2>
+        </div>
+        <form method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          {{form.as_p}}
+          <button type="submit" class="btn btn-dark">Confirm</button>
+        </form>
       </div>
     </section><!-- End About Section -->
 {% else %}
@@ -98,7 +98,7 @@
 
         <div class="row">
           <div class="col-lg-4" data-aos="fade-right">
-            <img src={% static 'portfolio/img/profile-img.jpg' %} class="img-fluid" alt="">
+            <img src={% static about.photo.url %} class="img-fluid" alt="">
           </div>
           <div class="col-lg-8 pt-4 pt-lg-0 content" data-aos="fade-left">
             <h3>{{about.job}}</h3>
@@ -142,7 +142,7 @@
     <!-- ======= Facts Section ======= -->
     <section id="facts" class="facts">
       <div class="container">
-  
+        <div class="section-title">
           <h2>Facts</h2>
           <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
         </div>
@@ -339,7 +339,7 @@
       </div>
     </section><!-- End Resume Section -->
 
-    {% if section == 'portfolio' %}
+    {% if section == 'portfolio' or section == 'portfolio_description' %}
     <!-- ======= Portfolio Section ======= -->
     <section id="portfolio" class="portfolio section-bg">
       <div class="container">
@@ -362,11 +362,10 @@
       <div class="container">
         <div class="section-title">
           <h2>Portfolio</h2>
-          {% for project in portfolio %}
-            {% if forloop.last %}
-                <p>{{ project.description_po }}</p>
-            {% endif %}
-          {% endfor %}
+          <div class="description d-flex align-items-center">
+            <p>{{ portfolio_description.description_portfolio }}</p> 
+            <a href="{% url 'edit' 'portfolio_description' %}#portfolio"><button class="btn btn-dark ms-3"><i class="fa-solid fa-pen-to-square"></i></button></a>
+          </div>
         </div>
 
         <div class="row" data-aos="fade-up">
@@ -385,17 +384,15 @@
         {% for project in portfolio %}
           <div class="col-lg-4 col-md-6 portfolio-item filter-{{project.category}}">
             <div class="portfolio-wrap">
-              {% if 'https' in project.image %}
-                  <img src="{{ project.image }}" class="img-fluid" alt="">
+              {% if 'http' in project.image %}
+                <img src="{{ project.image }}" class="img-fluid" alt="">
               {% else %}
-                  <img src="{% static 'portfolio/img/media' project.image.url %}" class="img-fluid" alt="">
+                <img src="{% static project.image.url %}" class="img-fluid" alt="">
               {% endif %}
 
               <div class="portfolio-links">
-                <a href="{% if 'http' in project.image %}{{ project.image }}{% else %}{% static project.image %}{% endif %}" data-gallery="portfolioGallery" class="portfolio-lightbox" title="{{ project.title }}"><i class="bx bx-plus"></i></a>
-                <a href="{% url 'portfolio-details' project.id %}" title="More Details"><i class="bx bx-link"></i></a>
-                <a href="{% url 'edit_details' 'portfolio' project.id %}#portfolio"><i class="fa-solid fa-pen-to-square fa-2xs"></i></a>
-                <a href="{% url 'delete' 'portfolio' project.id %}#portfolio"><i class="fa-solid fa-trash fa-2xs"></i></a>
+                <a href="{% if 'http' in project.image %}{{ project.image }}{% else %}{% static project.image.url %}{% endif %}" data-gallery="portfolioGallery" class="portfolio-lightbox" title="{{ project.title }}"><i class="bx bx-plus"></i></a>
+                <a href={% url 'portfolio-details' project.id %} title="More Details"><i class="bx bx-link"></i></a>
               </div>
             </div>
           </div>
@@ -409,7 +406,7 @@
     {% endif %}
 
     <!-- ======= Services Section ======= -->
-    {% if section == 'services' %}
+    {% if section == 'services' or section == 'services_description' %}
     <section id="services" class="services">
       <div class="container">
         
@@ -433,11 +430,7 @@
           
           <div class="section-title">
               <h2>Services</h2>
-              {% for service in services %}
-                {% if forloop.last %}
-                    <p>{{ service.description_se }}</p>
-                {% endif %}
-              {% endfor %}
+              <p>{{services_description.description_services}}</p>
               {% if services.has_previous %}
                   <a href="?page={{ services.previous_page_number }}">Précédent</a>
               {% endif %}
@@ -474,7 +467,7 @@
     {% endif %}
 
     <!-- ======= Testimonials Section ======= -->
-    {% if section == 'testimonials' %}
+    {% if section == 'testimonials' or section == 'testimonials_description' %}
     <section id="testimonials" class="testimonials section-bg">
       <div class="container">
         
@@ -496,11 +489,7 @@
         
         <div class="section-title">
           <h2>Testimonials</h2>
-          {% for testi in testimonials %}
-            {% if forloop.last %}
-                <p>{{ testi.description_te }}</p>
-            {% endif %}
-          {% endfor %}
+          <p>{{testimonials_description.description_testimonials}}</p>
         </div>
 
         <div class="testimonials-slider swiper" data-aos="fade-up" data-aos-delay="100">
@@ -514,7 +503,7 @@
                   {{testi.message}}
                   <i class="bx bxs-quote-alt-right quote-icon-right"></i>
                 </p>
-                <img src={% static testi.photo %} class="testimonial-img" alt="">
+                <img src="{% static testi.photo.url %}" class="testimonial-img" alt="">
                 <h3>{{testi.name}}</h3>
                 <h4>{{testi.job}}</h4>
               </div>

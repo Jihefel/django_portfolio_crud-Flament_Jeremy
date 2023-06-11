@@ -9,6 +9,7 @@ class Header(models.Model):
         return self.full_name
 
 class About(models.Model):
+    photo = models.ImageField(blank=True)
     description1_ab = models.TextField(blank=True)
     description2_ab = models.TextField(blank=True)
     description3_ab = models.TextField(blank=True)
@@ -36,7 +37,6 @@ class Skills(models.Model):
         return self.description1_sk
 
 class Portfolio(models.Model):
-    description_po = models.TextField(blank=True)
     image = models.ImageField(blank=True)
     title = models.CharField(max_length=100, blank=True)
     CATEGORY_CHOICES = (
@@ -49,6 +49,9 @@ class Portfolio(models.Model):
     def __str__(self):
         return f"{self.title} - {self.category}"
     
+class Portfolio_description(models.Model):
+    description_portfolio = models.TextField(blank=True)
+
 class Services(models.Model):
     icon = models.TextField(blank=True)
     title = models.CharField(max_length=100, blank=True)
@@ -57,14 +60,19 @@ class Services(models.Model):
     def __str__(self):
         return f"{self.icon} - {self.title}"
     
+class Services_description(models.Model):
+    description_services = models.TextField(blank=True)
+
 class Testimonials(models.Model):
-    description_te = models.TextField(blank=True)
     photo = models.ImageField(blank=True)
     name = models.CharField(max_length=100, blank=True)
     job = models.CharField(max_length=50, blank=True)
     message = models.TextField(blank=True)
     def __str__(self):
         return self.name
+
+class Testimonials_description(models.Model):
+    description_testimonials = models.TextField(blank=True)
 
 class Contact(models.Model):
     description_co = models.TextField(blank=True)

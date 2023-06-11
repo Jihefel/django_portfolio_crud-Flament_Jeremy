@@ -41,7 +41,7 @@
 {% block content %}
 
   <!-- ======= Hero Section ======= -->
-  <section id="hero" class="d-flex flex-column justify-content-center align-items-center">
+  <section id="hero" class="d-flex flex-column justify-content-center align-items-center" style="background: url({% static header.image_hero.url %}) top center; background-size: cover">
     <div class="hero-container" data-aos="fade-in">
       <h1>{{ header.full_name }}</h1>
       <p>I'm <span class="typed" data-typed-items="{{header.jobs}}"></span></p>
@@ -60,7 +60,7 @@
 
         <div class="row">
           <div class="col-lg-4" data-aos="fade-right">
-            <img src={% static 'portfolio/img/profile-img.jpg' %} class="img-fluid" alt="">
+            <img src={% static about.photo.url %} class="img-fluid" alt="">
           </div>
           <div class="col-lg-8 pt-4 pt-lg-0 content" data-aos="fade-left">
             <h3>{{about.job}}</h3>
@@ -286,11 +286,7 @@
 
         <div class="section-title">
           <h2>Portfolio</h2>
-          {% for project in portfolio %}
-            {% if forloop.last %}
-                <p>{{ project.description_po }}</p>
-            {% endif %}
-          {% endfor %}
+          <p>{{ portfolio_description.description_portfolio }}</p>
         </div>
 
         <div class="row" data-aos="fade-up">
@@ -335,11 +331,7 @@
           <!-- ... Autres éléments ... -->
           <div class="section-title">
               <h2>Services</h2>
-              {% for service in services %}
-                {% if forloop.last %}
-                    <p>{{ service.description_se }}</p>
-                {% endif %}
-              {% endfor %}
+              <p>{{services_description.description_services}}</p>
               {% if services.has_previous %}
                   <a href="?page={{ services.previous_page_number }}">Précédent</a>
               {% endif %}
@@ -377,11 +369,7 @@
 
         <div class="section-title">
           <h2>Testimonials</h2>
-          {% for test in testimonials %}
-            {% if forloop.last %}
-                <p>{{ testi.description_te }}</p>
-            {% endif %}
-          {% endfor %}
+          <p>{{testimonials_description.description_testimonials}}</p>
         </div>
 
         <div class="testimonials-slider swiper" data-aos="fade-up" data-aos-delay="100">
